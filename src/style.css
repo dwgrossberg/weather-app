@@ -1,0 +1,18 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: none;
+  min-width: 100vw;
+  min-height: 100vh;
+  background-image: url("./assets/clouds.gif");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+#content {
+}
