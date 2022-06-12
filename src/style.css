@@ -1,3 +1,17 @@
+@font-face {
+  font-family: "swansea";
+  src: url("./assets/Swansea-q3pd.ttf") format("ttf");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "swansea";
+  src: url("./assets/SwanseaBold-D0ox.ttf") format("ttf");
+  font-weight: 900;
+  font-style: bold;
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -8,11 +22,59 @@ body {
   overflow: none;
   min-width: 100vw;
   min-height: 100vh;
-  /* background-image: url("./assets/clouds.gif"); */
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
 }
 
 #content {
+  height: 100vh;
+  display: grid;
+  grid-template: 3fr 2fr / 1fr 1fr;
+}
+
+#left-panel {
+  grid-area: 1 / 1 / 2 / 2;
+  height: 100%;
+  width: 100%;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(248, 248, 255, 0.1);
+  border-radius: 9px;
+}
+
+#temp-icon {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 25%;
+}
+
+#temp {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  color: white;
+  font-family: "swansea", sans-serif;
+  font-weight: bold;
+  font-size: 45px;
+  letter-spacing: 0.1rem;
+}
+
+#icon {
+  margin-left: auto;
+}
+
+#right-panel {
+  grid-area: 1 / 2 / 2 / 3;
+  height: 100%;
+  width: 100%;
+  margin: 20px;
+}
+
+#footer {
+  grid-area: 2 / 1 / 3 / 3;
+  height: 100%;
+  width: 100%;
 }

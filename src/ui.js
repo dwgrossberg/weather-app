@@ -17,12 +17,16 @@ import cloudsN from "./assets/clouds-n.jpg";
 const displayController = (() => {
   const setWeather = async () => {
     // Default weather on page load
-    const weatherData = await fetchWeatherAPI.getWeather("spain");
+    const weatherData = await fetchWeatherAPI.getWeather("bangkok");
     const weatherTime = weatherData.weather[0].icon.substring(
       weatherData.weather[0].icon.length - 1
     );
-    console.log(weatherData, weatherTime);
+    const weatherTemp = weatherData.main.temp.toFixed(1);
+    const weatherIcon = weatherData.weather[0].icon;
+    console.log(weatherData);
     setBackground(weatherData.weather[0].main, weatherTime);
+    setTemp(weatherTemp);
+    setIcon(weatherIcon);
   };
   setWeather();
 
@@ -107,6 +111,18 @@ const displayController = (() => {
         }
         break;
     }
+  };
+
+  const setTemp = (temp) => {
+    const tempDOM = document.getElementById("temp");
+    tempDOM.innerHTML = temp + "&#xb0;" + "F";
+  };
+
+  const setIcon = (icon) => {
+    const iconDOM = document.getElementById("icon");
+    const img = document.createElement("img");
+    img.src = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+    iconDOM.appendChild(img);
   };
 
   return {};
