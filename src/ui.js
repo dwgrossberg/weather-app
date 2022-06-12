@@ -1,34 +1,72 @@
 import fetchWeatherAPI from "./fetchAPI.js";
-import clouds from "./assets/clouds.gif";
-import drizzle from "./assets/drizzle.gif";
-import thunderstorm from "./assets/thunderstorm.gif";
-import rain from "./assets/rain.gif";
-import snow from "./assets/snow.gif";
-import mist from "./assets/fog.gif";
-import clear from "./assets/clear-sky.gif";
+import thunderstormD from "./assets/thunderstorm-d.jpg";
+import thunderstormN from "./assets/thunderstorm-n.jpg";
+import drizzleD from "./assets/drizzle-d.jpg";
+import drizzleN from "./assets/drizzle-n.jpg";
+import rainD from "./assets/rain-d.jpg";
+import rainN from "./assets/rain-n.jpg";
+import snowD from "./assets/snow-d.jpg";
+import snowN from "./assets/snow-n.jpg";
+import atmosphereD from "./assets/atmosphere-d.jpg";
+import atmosphereN from "./assets/atmosphere-n.jpg";
+import clearD from "./assets/clear-d.jpg";
+import clearN from "./assets/clear-n.jpg";
+import cloudsD from "./assets/clouds-d.jpg";
+import cloudsN from "./assets/clouds-n.jpg";
 
 const displayController = (() => {
   const setWeather = async () => {
     // Default weather on page load
-    const weatherData = await fetchWeatherAPI.getWeather("beijing");
-    console.log(weatherData);
-    setBackground(weatherData.weather[0].main);
+    const weatherData = await fetchWeatherAPI.getWeather("spain");
+    const weatherTime = weatherData.weather[0].icon.substring(
+      weatherData.weather[0].icon.length - 1
+    );
+    console.log(weatherData, weatherTime);
+    setBackground(weatherData.weather[0].main, weatherTime);
   };
   setWeather();
 
-  const setBackground = (weather) => {
+  const setBackground = (weather, time) => {
     switch (weather) {
       case "Thunderstorm":
-        document.body.style.backgroundImage = `url(${thunderstorm})`;
+        switch (time) {
+          case "d":
+            document.body.style.backgroundImage = `url(${thunderstormD})`;
+            break;
+          case "n":
+            document.body.style.backgroundImage = `url(${thunderstormN})`;
+            break;
+        }
         break;
       case "Drizzle":
-        document.body.style.backgroundImage = `url(${drizzle})`;
+        switch (time) {
+          case "d":
+            document.body.style.backgroundImage = `url(${drizzleD})`;
+            break;
+          case "n":
+            document.body.style.backgroundImage = `url(${drizzleN})`;
+            break;
+        }
         break;
       case "Rain":
-        document.body.style.backgroundImage = `url(${rain})`;
+        switch (time) {
+          case "d":
+            document.body.style.backgroundImage = `url(${rainD})`;
+            break;
+          case "n":
+            document.body.style.backgroundImage = `url(${rainN})`;
+            break;
+        }
         break;
       case "Snow":
-        document.body.style.backgroundImage = `url(${snow})`;
+        switch (time) {
+          case "d":
+            document.body.style.backgroundImage = `url(${snowD})`;
+            break;
+          case "n":
+            document.body.style.backgroundImage = `url(${snowN})`;
+            break;
+        }
         break;
       case "Mist":
       case "Smoke":
@@ -39,13 +77,34 @@ const displayController = (() => {
       case "Ash":
       case "Squall":
       case "Tornado":
-        document.body.style.backgroundImage = `url(${mist})`;
+        switch (time) {
+          case "d":
+            document.body.style.backgroundImage = `url(${atmosphereD})`;
+            break;
+          case "n":
+            document.body.style.backgroundImage = `url(${atmosphereN})`;
+            break;
+        }
         break;
       case "Clear":
-        document.body.style.backgroundImage = `url(${clear})`;
+        switch (time) {
+          case "d":
+            document.body.style.backgroundImage = `url(${clearD})`;
+            break;
+          case "n":
+            document.body.style.backgroundImage = `url(${clearN})`;
+            break;
+        }
         break;
       case "Clouds":
-        document.body.style.backgroundImage = `url(${clouds})`;
+        switch (time) {
+          case "d":
+            document.body.style.backgroundImage = `url(${cloudsD})`;
+            break;
+          case "n":
+            document.body.style.backgroundImage = `url(${cloudsN})`;
+            break;
+        }
         break;
     }
   };
