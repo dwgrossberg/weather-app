@@ -1,3 +1,6 @@
+import format from "date-fns/format";
+import fromUnixTime from "date-fns/fromUnixTime";
+import { utcToZonedTime } from "date-fns-tz";
 import fetchWeatherAPI from "./fetchAPI.js";
 import thunderstormD from "./assets/thunderstorm-d.jpg";
 import thunderstormN from "./assets/thunderstorm-n.jpg";
@@ -21,13 +24,13 @@ const displayController = (() => {
     const weatherTime = weatherData.weather[0].icon.substring(
       weatherData.weather[0].icon.length - 1
     );
-    console.log(weatherData);
+    console.log(weatherData, weatherData.dt);
     setBackground(weatherData.weather[0].main, weatherTime);
     setTemp(weatherData.main.temp.toFixed(1));
     setIcon(weatherData.weather[0].icon);
     setDescription(weatherData.weather[0].description);
     setLocation(weatherData.name);
-    setDate(new Date().toLocaleDateString());
+    setDate(format(fromUnixTime(weatherData.dt), "EEEE MMM do yyyy"));
   };
   setWeather();
 
@@ -116,7 +119,7 @@ const displayController = (() => {
 
   const setTemp = (temp) => {
     const tempDOM = document.getElementById("temp");
-    tempDOM.innerHTML = temp + "&#xb0;" + "F";
+    tempDOM.innerHTML = temp + "&#xb0;" + "C";
   };
 
   const setIcon = (icon) => {
@@ -127,8 +130,15 @@ const displayController = (() => {
   };
 
   const setDescription = (details) => {
+    const uppercase = details
+      .split(" ")
+      .map(
+        (item) =>
+          (item = item.substring(0, 1).toUpperCase() + item.substring(1))
+      )
+      .join(" ");
     const descriptionDOM = document.getElementById("description");
-    descriptionDOM.innerText = details;
+    descriptionDOM.innerText = uppercase;
   };
 
   const setLocation = (place) => {
@@ -144,15 +154,10 @@ const displayController = (() => {
   const setTime = () => {
     const timeDOM = document.getElementById("time");
     var d = new Date();
-    var s = d.getSeconds();
-    var m = d.getMinutes();
-    var h = d.getHours();
-    timeDOM.textContent =
-      ("0" + h).substring(-2) +
-      ":" +
-      ("0" + m).substring(-2) +
-      ":" +
-      ("0" + s).substring(-2);
+    var s = ("0" + d.getSeconds()).slice(-2);
+    var m = ("0" + d.getMinutes()).slice(-2);
+    var h = ("0" + d.getHours()).slice(-2);
+    timeDOM.textContent = h + ":" + m + ":" + s;
   };
   setInterval(setTime, 1000);
 
