@@ -21,12 +21,13 @@ const displayController = (() => {
     const weatherTime = weatherData.weather[0].icon.substring(
       weatherData.weather[0].icon.length - 1
     );
-    const weatherTemp = weatherData.main.temp.toFixed(1);
-    const weatherIcon = weatherData.weather[0].icon;
     console.log(weatherData);
     setBackground(weatherData.weather[0].main, weatherTime);
-    setTemp(weatherTemp);
-    setIcon(weatherIcon);
+    setTemp(weatherData.main.temp.toFixed(1));
+    setIcon(weatherData.weather[0].icon);
+    setDescription(weatherData.weather[0].description);
+    setLocation(weatherData.name);
+    setDate(new Date().toLocaleDateString());
   };
   setWeather();
 
@@ -124,6 +125,36 @@ const displayController = (() => {
     img.src = `http://openweathermap.org/img/wn/${icon}@2x.png`;
     iconDOM.appendChild(img);
   };
+
+  const setDescription = (details) => {
+    const descriptionDOM = document.getElementById("description");
+    descriptionDOM.innerText = details;
+  };
+
+  const setLocation = (place) => {
+    const locationDOM = document.getElementById("location");
+    locationDOM.innerText = place;
+  };
+
+  const setDate = (date) => {
+    const dateDOM = document.getElementById("date");
+    dateDOM.innerText = date;
+  };
+
+  const setTime = () => {
+    const timeDOM = document.getElementById("time");
+    var d = new Date();
+    var s = d.getSeconds();
+    var m = d.getMinutes();
+    var h = d.getHours();
+    timeDOM.textContent =
+      ("0" + h).substring(-2) +
+      ":" +
+      ("0" + m).substring(-2) +
+      ":" +
+      ("0" + s).substring(-2);
+  };
+  setInterval(setTime, 1000);
 
   return {};
 })();
