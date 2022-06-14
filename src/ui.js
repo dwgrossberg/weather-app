@@ -16,22 +16,23 @@ import cloudsD from "./assets/clouds-d.jpg";
 import cloudsN from "./assets/clouds-n.jpg";
 
 const displayController = (() => {
-  const setWeather = async () => {
+  const setWeather = async (place) => {
     // Default weather on page load
-    const weatherData = await fetchWeatherAPI.getWeather("bangkok");
+    const weatherData = await fetchWeatherAPI.getWeather(place);
     const weatherTime = weatherData.weather[0].icon.substring(
       weatherData.weather[0].icon.length - 1
     );
-    console.log(weatherData, weatherData.dt);
+    console.log(weatherData);
     setBackground(weatherData.weather[0].main, weatherTime);
     setTemp(weatherData.main.temp.toFixed(1));
     setIcon(weatherData.weather[0].icon);
     setDescription(weatherData.weather[0].description);
     setLocation(weatherData.name);
-    setDate(format(getLocalTime(weatherData.timezone), "EEEE MMM do yyyy"));
-    setTime(format(getLocalTime(weatherData.timezone), "p"));
+    setDate(format(getLocalTime(weatherData.timezone), "E MMM do yyyy"));
+    setTime(format(getLocalTime(weatherData.timezone), "hh:mm aaaa"));
+    setFeelsLike(weatherData.main.feels_like.toFixed(1));
   };
-  setWeather();
+  setWeather("bangkok");
 
   const setBackground = (weather, time) => {
     switch (weather) {
@@ -117,12 +118,12 @@ const displayController = (() => {
   };
 
   const setTemp = (temp) => {
-    const tempDOM = document.getElementById("temp");
+    const tempDOM = document.getElementById("weather-temp");
     tempDOM.innerHTML = temp + "&#xb0;" + "C";
   };
 
   const setIcon = (icon) => {
-    const iconDOM = document.getElementById("icon");
+    const iconDOM = document.getElementById("weather-icon");
     const img = document.createElement("img");
     img.src = `http://openweathermap.org/img/wn/${icon}@2x.png`;
     iconDOM.appendChild(img);
@@ -166,6 +167,11 @@ const displayController = (() => {
     timeDOM.innerText = time;
   };
 
+  const setFeelsLike = (temp) => {
+    const feelsLikeDOM = document.getElementById("feels-like-data");
+    feelsLikeDOM.innerHTML = temp + "&#xb0;" + "C";
+  };
+
   const setLocalTime = () => {
     localTimeDOM.innerText = new Date();
     const d = new Date();
@@ -174,7 +180,7 @@ const displayController = (() => {
     const h = ("0" + d.getHours()).slice(-2);
     localTimeDOM.textContent = h + ":" + m + ":" + s;
   };
-  // setInterval(setTime, 1000);
+  // setInterval(setLocalTime, 1000);
 
   return {};
 })();
