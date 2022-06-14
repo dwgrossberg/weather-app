@@ -31,6 +31,20 @@ const displayController = (() => {
     setDate(format(getLocalTime(weatherData.timezone), "E MMM do yyyy"));
     setTime(format(getLocalTime(weatherData.timezone), "hh:mm aaaa"));
     setFeelsLike(weatherData.main.feels_like.toFixed(1));
+    setHumidity(weatherData.main.humidity);
+    setWindSpeed(weatherData.wind.speed);
+    setSunriseTime(
+      format(
+        getLocalSunrise(weatherData.timezone, weatherData.sys.sunrise),
+        "hh:mm"
+      )
+    );
+    setSunsetTime(
+      format(
+        getLocalSunset(weatherData.timezone, weatherData.sys.sunset),
+        "hh:mm"
+      )
+    );
   };
   setWeather("bangkok");
 
@@ -119,7 +133,7 @@ const displayController = (() => {
 
   const setTemp = (temp) => {
     const tempDOM = document.getElementById("weather-temp");
-    tempDOM.innerHTML = temp + "&#xb0;" + "C";
+    tempDOM.innerHTML = temp + "&#xb0;" + " C";
   };
 
   const setIcon = (icon) => {
@@ -147,14 +161,31 @@ const displayController = (() => {
   };
 
   // Convert timezone offset to local date/time
-  const getLocalTime = (data) => {
+  const getLocalTime = (timezone) => {
     let date = new Date();
     let time = date.getTime();
     let localOffset = date.getTimezoneOffset() * 60000;
     let utc = time + localOffset;
-    let localTime = utc + 1000 * data;
-    let localTimeDate = new Date(localTime);
-    return localTimeDate;
+    let localTime = utc + 1000 * timezone;
+    return new Date(localTime);
+  };
+
+  const getLocalSunrise = (timezone, sunrise) => {
+    let date = new Date(sunrise * 1000);
+    let time = date.getTime();
+    let localOffset = date.getTimezoneOffset() * 60000;
+    let utc = time + localOffset;
+    let localTime = utc + 1000 * timezone;
+    return new Date(localTime);
+  };
+
+  const getLocalSunset = (timezone, sunset) => {
+    let date = new Date(sunset * 1000);
+    let time = date.getTime();
+    let localOffset = date.getTimezoneOffset() * 60000;
+    let utc = time + localOffset;
+    let localTime = utc + 1000 * timezone;
+    return new Date(localTime);
   };
 
   const setDate = (date) => {
@@ -169,7 +200,27 @@ const displayController = (() => {
 
   const setFeelsLike = (temp) => {
     const feelsLikeDOM = document.getElementById("feels-like-data");
-    feelsLikeDOM.innerHTML = temp + "&#xb0;" + "C";
+    feelsLikeDOM.innerHTML = temp + "&#xb0;" + " C";
+  };
+
+  const setHumidity = (temp) => {
+    const humidityDOM = document.getElementById("humidity-data");
+    humidityDOM.innerText = temp + " %";
+  };
+
+  const setWindSpeed = (wind) => {
+    const windSpeedDOM = document.getElementById("wind-speed-data");
+    windSpeedDOM.innerText = wind + " km/h";
+  };
+
+  const setSunriseTime = (time) => {
+    const sunriseDOM = document.getElementById("sunrise-data");
+    sunriseDOM.innerText = time;
+  };
+
+  const setSunsetTime = (time) => {
+    const sunsetDOM = document.getElementById("sunset-data");
+    sunsetDOM.innerText = time;
   };
 
   const setLocalTime = () => {
