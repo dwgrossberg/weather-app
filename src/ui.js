@@ -1,6 +1,4 @@
 import format from "date-fns/format";
-import fromUnixTime from "date-fns/fromUnixTime";
-import { utcToZonedTime } from "date-fns-tz";
 import fetchWeatherAPI from "./fetchAPI.js";
 import thunderstormD from "./assets/thunderstorm-d.jpg";
 import thunderstormN from "./assets/thunderstorm-n.jpg";
@@ -30,7 +28,8 @@ const displayController = (() => {
     setIcon(weatherData.weather[0].icon);
     setDescription(weatherData.weather[0].description);
     setLocation(weatherData.name);
-    setDate(format(fromUnixTime(weatherData.dt), "EEEE MMM do yyyy"));
+    setDate(format(getLocalTime(weatherData.timezone), "EEEE MMM do yyyy"));
+    setTime(format(getLocalTime(weatherData.timezone), "p"));
   };
   setWeather();
 
@@ -146,20 +145,36 @@ const displayController = (() => {
     locationDOM.innerText = place;
   };
 
+  // Convert timezone offset to local date/time
+  const getLocalTime = (data) => {
+    let date = new Date();
+    let time = date.getTime();
+    let localOffset = date.getTimezoneOffset() * 60000;
+    let utc = time + localOffset;
+    let localTime = utc + 1000 * data;
+    let localTimeDate = new Date(localTime);
+    return localTimeDate;
+  };
+
   const setDate = (date) => {
     const dateDOM = document.getElementById("date");
     dateDOM.innerText = date;
   };
 
-  const setTime = () => {
+  const setTime = (time) => {
     const timeDOM = document.getElementById("time");
-    var d = new Date();
-    var s = ("0" + d.getSeconds()).slice(-2);
-    var m = ("0" + d.getMinutes()).slice(-2);
-    var h = ("0" + d.getHours()).slice(-2);
-    timeDOM.textContent = h + ":" + m + ":" + s;
+    timeDOM.innerText = time;
   };
-  setInterval(setTime, 1000);
+
+  const setLocalTime = () => {
+    localTimeDOM.innerText = new Date();
+    const d = new Date();
+    const s = ("0" + d.getSeconds()).slice(-2);
+    const m = ("0" + d.getMinutes()).slice(-2);
+    const h = ("0" + d.getHours()).slice(-2);
+    localTimeDOM.textContent = h + ":" + m + ":" + s;
+  };
+  // setInterval(setTime, 1000);
 
   return {};
 })();

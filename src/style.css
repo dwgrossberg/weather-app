@@ -52,8 +52,8 @@ body {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  /* background-color: rgba(248, 248, 255, 0.25); */
-  /* border-radius: 9px; */
+  background-color: rgba(134, 134, 134, 0.2);
+  border-radius: 9px;
 }
 
 #temp-icon {
@@ -71,7 +71,7 @@ body {
   font-weight: bold;
   font-size: clamp(2rem, 5vw, 3rem);
   letter-spacing: 0.1rem;
-  text-shadow: 1px 1px slategrey;
+  text-shadow: 1.5px 1.5px slategrey;
 }
 
 #icon {
@@ -86,24 +86,24 @@ body {
 
 #description {
   font-size: clamp(1.5rem, 5vw, 2.5rem);
-  text-shadow: 0.5px 0.5px slategrey;
+  text-shadow: 1px 1px slategrey;
   margin-bottom: 10px;
 }
 
 #location {
   font-size: clamp(1.3rem, 3.5vw, 2rem);
-  text-shadow: 0.5px 0.5px slategrey;
+  text-shadow: 1px 1px slategrey;
   margin-bottom: 10px;
 }
 
 #date {
   font-size: clamp(1.1rem, 2.5vw, 1.75rem);
-  text-shadow: 0.5px 0.5px slategrey;
+  text-shadow: 1px 1px slategrey;
 }
 
 #time {
   font-size: clamp(1.5rem, 3vw, 2rem);
-  text-shadow: 0.5px 0.5px slategrey;
+  text-shadow: 1px 1px slategrey;
   /* font-family: "digital"; */
 }
 
