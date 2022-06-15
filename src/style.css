@@ -244,7 +244,7 @@ body {
   border-radius: 50%;
 }
 
-label {
+label[for="city/place"] {
   font-size: 13px;
   display: flex;
   flex-direction: column;
@@ -252,14 +252,12 @@ label {
 }
 
 #place-search {
-  outline: none;
   border: none;
   text-align: center;
   font-size: 13px;
   padding: 7px 12px;
   border-radius: 7px;
   width: 120px;
-  outline: 1px 1px slategray;
   margin-top: 10px;
 }
 
@@ -268,8 +266,21 @@ label {
 }
 
 #place-search:focus {
-  outline: 1px 1px violet;
+  outline: none;
   border: none;
+}
+
+.local-time {
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+#local-clock {
+  font-size: 20px;
+  font-family: "Courier New", Courier, monospace;
 }
 
 #footer {

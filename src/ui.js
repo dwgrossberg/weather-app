@@ -131,25 +131,14 @@ const displayController = (() => {
     }
   };
 
-  const weatherSearch = () => {
-    const search = document.getElementById("place-search");
-    search.addEventListener("search", () => {
-      console.log(search.value);
-      setWeather(search.value);
-    });
-  };
-  weatherSearch();
-
   const setTemp = (temp) => {
     const tempDOM = document.getElementById("weather-temp");
     tempDOM.innerHTML = temp + "&#xb0;" + " C";
   };
 
   const setIcon = (icon) => {
-    const iconDOM = document.getElementById("weather-icon");
-    const img = document.createElement("img");
-    img.src = `http://openweathermap.org/img/wn/${icon}@2x.png`;
-    iconDOM.appendChild(img);
+    const iconDOM = document.getElementById("weather-icon-img");
+    iconDOM.src = `http://openweathermap.org/img/wn/${icon}@2x.png`;
   };
 
   const setDescription = (details) => {
@@ -278,7 +267,20 @@ const displayController = (() => {
     return (speed * 1.609344).toFixed(1);
   };
 
+  // Search for weather in a new city/place
+  const weatherSearch = () => {
+    const search = document.getElementById("place-search");
+    search.addEventListener("search", () => {
+      if (search.value === "") return;
+      else {
+        setWeather(search.value);
+      }
+    });
+  };
+  weatherSearch();
+
   const setLocalTime = () => {
+    const localTimeDOM = document.getElementById("local-clock");
     localTimeDOM.innerText = new Date();
     const d = new Date();
     const s = ("0" + d.getSeconds()).slice(-2);
@@ -286,7 +288,7 @@ const displayController = (() => {
     const h = ("0" + d.getHours()).slice(-2);
     localTimeDOM.textContent = h + ":" + m + ":" + s;
   };
-  // setInterval(setLocalTime, 1000);
+  setInterval(setLocalTime, 1000);
 
   return {};
 })();
