@@ -32,7 +32,7 @@ const displayController = (() => {
     setTime(format(getLocalTime(weatherData.timezone), "hh:mm aaaa"));
     setFeelsLike(weatherData.main.feels_like.toFixed(1));
     setHumidity(weatherData.main.humidity);
-    setWindSpeed(weatherData.wind.speed);
+    setWindSpeed(weatherData.wind.speed.toFixed(1));
     setSunriseTime(
       format(
         getLocalSunrise(weatherData.timezone, weatherData.sys.sunrise),
@@ -46,7 +46,7 @@ const displayController = (() => {
       )
     );
   };
-  setWeather("barcelona");
+  setWeather("hamburg");
 
   const setBackground = (weather, time) => {
     switch (weather) {
@@ -130,6 +130,15 @@ const displayController = (() => {
         break;
     }
   };
+
+  const weatherSearch = () => {
+    const search = document.getElementById("place-search");
+    search.addEventListener("search", () => {
+      console.log(search.value);
+      setWeather(search.value);
+    });
+  };
+  weatherSearch();
 
   const setTemp = (temp) => {
     const tempDOM = document.getElementById("weather-temp");
@@ -227,6 +236,7 @@ const displayController = (() => {
     const tempSwitch = document.getElementById("switch-temp");
     const temp = document.getElementById("weather-temp");
     const feelsLike = document.getElementById("feels-like-data");
+    const windSpeed = document.getElementById("wind-speed-data");
     tempSwitch.addEventListener("change", () => {
       if (tempSwitch.checked === true) {
         temp.innerHTML =
@@ -235,6 +245,8 @@ const displayController = (() => {
           celsiusToFahrenheit(feelsLike.innerText.slice(0, -3)) +
           "&#xb0;" +
           " F";
+        windSpeed.innerText =
+          kilometersToMiles(windSpeed.innerText.slice(0, -5)) + " mph";
       } else {
         temp.innerHTML =
           fahrenheitToCelsius(temp.innerText.slice(0, -3)) + "&#xb0;" + " C";
@@ -242,19 +254,28 @@ const displayController = (() => {
           fahrenheitToCelsius(feelsLike.innerText.slice(0, -3)) +
           "&#xb0;" +
           " C";
+        windSpeed.innerText =
+          milesToKilometers(windSpeed.innerText.slice(0, -4)) + " km/h";
       }
     });
   };
-
   setTempUnits();
 
-  // Temperature conversion
+  // Unit conversion functions
   const celsiusToFahrenheit = (temp) => {
     return (temp * (9 / 5) + 32).toFixed(1);
   };
 
   const fahrenheitToCelsius = (temp) => {
     return ((temp - 32) * (5 / 9)).toFixed(1);
+  };
+
+  const kilometersToMiles = (speed) => {
+    return (speed / 1.609344).toFixed(1);
+  };
+
+  const milesToKilometers = (speed) => {
+    return (speed * 1.609344).toFixed(1);
   };
 
   const setLocalTime = () => {

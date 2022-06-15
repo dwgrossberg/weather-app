@@ -12,7 +12,7 @@
   font-style: bold;
 }
 
-/* add @media for less than 500px - change to vertical cards */
+/* add @media for less than 560px - change to vertical cards */
 
 * {
   padding: 0;
@@ -68,9 +68,10 @@ body {
   display: flex;
   align-items: center;
   font-weight: bold;
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(1.5rem, 5vw, 3rem);
   letter-spacing: 0.1rem;
   text-shadow: 1.5px 1.5px slategrey;
+  white-space: nowrap;
 }
 
 #weather-icon {
@@ -168,6 +169,16 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  min-width: fit-content;
+}
+
+.temp-toggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 14px;
+  gap: 10px;
 }
 
 .switch {
@@ -177,7 +188,7 @@ body {
   height: 28px;
 }
 
-.switch input {
+.switch #switch-temp {
   opacity: 0;
   width: 0;
   height: 0;
@@ -211,15 +222,15 @@ body {
   transition: 0.4s;
 }
 
-input:checked + .slider {
-  background-color: rosybrown;
+#switch-temp:checked + .slider {
+  background-color: indigo;
 }
 
-input:focus + .slider {
-  box-shadow: 0 0 1px rosybrown;
+#switch-temp:focus + .slider {
+  box-shadow: 0 0 1px indigo;
 }
 
-input:checked + .slider:before {
+#switch-temp:checked + .slider:before {
   -webkit-transform: translateX(22px);
   -ms-transform: translateX(22px);
   transform: translateX(22px);
@@ -231,6 +242,34 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+label {
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#place-search {
+  outline: none;
+  border: none;
+  text-align: center;
+  font-size: 13px;
+  padding: 7px 12px;
+  border-radius: 7px;
+  width: 120px;
+  outline: 1px 1px slategray;
+  margin-top: 10px;
+}
+
+#place-search:hover {
+  cursor: pointer;
+}
+
+#place-search:focus {
+  outline: 1px 1px violet;
+  border: none;
 }
 
 #footer {
