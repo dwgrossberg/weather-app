@@ -46,7 +46,7 @@ const displayController = (() => {
       )
     );
   };
-  setWeather("bangkok");
+  setWeather("barcelona");
 
   const setBackground = (weather, time) => {
     switch (weather) {
@@ -221,6 +221,40 @@ const displayController = (() => {
   const setSunsetTime = (time) => {
     const sunsetDOM = document.getElementById("sunset-data");
     sunsetDOM.innerText = time;
+  };
+
+  const setTempUnits = () => {
+    const tempSwitch = document.getElementById("switch-temp");
+    const temp = document.getElementById("weather-temp");
+    const feelsLike = document.getElementById("feels-like-data");
+    tempSwitch.addEventListener("change", () => {
+      if (tempSwitch.checked === true) {
+        temp.innerHTML =
+          celsiusToFahrenheit(temp.innerText.slice(0, -3)) + "&#xb0;" + " F";
+        feelsLike.innerHTML =
+          celsiusToFahrenheit(feelsLike.innerText.slice(0, -3)) +
+          "&#xb0;" +
+          " F";
+      } else {
+        temp.innerHTML =
+          fahrenheitToCelsius(temp.innerText.slice(0, -3)) + "&#xb0;" + " C";
+        feelsLike.innerHTML =
+          fahrenheitToCelsius(feelsLike.innerText.slice(0, -3)) +
+          "&#xb0;" +
+          " C";
+      }
+    });
+  };
+
+  setTempUnits();
+
+  // Temperature conversion
+  const celsiusToFahrenheit = (temp) => {
+    return (temp * (9 / 5) + 32).toFixed(1);
+  };
+
+  const fahrenheitToCelsius = (temp) => {
+    return ((temp - 32) * (5 / 9)).toFixed(1);
   };
 
   const setLocalTime = () => {
