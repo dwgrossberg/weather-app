@@ -17,7 +17,6 @@ import cloudsN from "./assets/clouds-n.jpg";
 
 const displayController = (() => {
   const setWeather = async (place) => {
-    // Default weather on page load
     const weatherData = await fetchWeatherAPI.getWeather(place);
     const weatherTime = weatherData.weather[0].icon.substring(
       weatherData.weather[0].icon.length - 1
@@ -274,6 +273,7 @@ const displayController = (() => {
       if (search.value === "") return;
       else {
         setWeather(search.value);
+        setForecast(search.value);
       }
     });
   };
@@ -289,6 +289,12 @@ const displayController = (() => {
     localTimeDOM.textContent = h + ":" + m + ":" + s;
   };
   setInterval(setLocalTime, 1000);
+
+  // 5-Day Forecast Weather Data
+  const setForecast = async (place) => {
+    const forecastData = await fetchWeatherAPI.getForecast(place);
+    console.log(forecastData.list);
+  };
 
   return {};
 })();
