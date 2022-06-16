@@ -44,6 +44,7 @@ const displayController = (() => {
         "hh:mm"
       )
     );
+    switchTemp();
   };
   setWeather("hamburg");
 
@@ -220,34 +221,30 @@ const displayController = (() => {
     sunsetDOM.innerText = time;
   };
 
-  const setTempUnits = () => {
-    const tempSwitch = document.getElementById("switch-temp");
+  const tempSwitch = document.getElementById("switch-temp");
+
+  const switchTemp = () => {
     const temp = document.getElementById("weather-temp");
     const feelsLike = document.getElementById("feels-like-data");
     const windSpeed = document.getElementById("wind-speed-data");
-    tempSwitch.addEventListener("change", () => {
-      if (tempSwitch.checked === true) {
-        temp.innerHTML =
-          celsiusToFahrenheit(temp.innerText.slice(0, -3)) + "&#xb0;" + " F";
-        feelsLike.innerHTML =
-          celsiusToFahrenheit(feelsLike.innerText.slice(0, -3)) +
-          "&#xb0;" +
-          " F";
-        windSpeed.innerText =
-          kilometersToMiles(windSpeed.innerText.slice(0, -5)) + " mph";
-      } else {
-        temp.innerHTML =
-          fahrenheitToCelsius(temp.innerText.slice(0, -3)) + "&#xb0;" + " C";
-        feelsLike.innerHTML =
-          fahrenheitToCelsius(feelsLike.innerText.slice(0, -3)) +
-          "&#xb0;" +
-          " C";
-        windSpeed.innerText =
-          milesToKilometers(windSpeed.innerText.slice(0, -4)) + " km/h";
-      }
-    });
+    if (tempSwitch.checked === true) {
+      temp.innerHTML =
+        celsiusToFahrenheit(temp.innerText.slice(0, -3)) + "&#xb0;" + " F";
+      feelsLike.innerHTML =
+        celsiusToFahrenheit(feelsLike.innerText.slice(0, -3)) + "&#xb0;" + " F";
+      windSpeed.innerText =
+        kilometersToMiles(windSpeed.innerText.slice(0, -5)) + " mph";
+    } else if (temp.innerText.substring(temp.innerText.length - 1) !== "C") {
+      temp.innerHTML =
+        fahrenheitToCelsius(temp.innerText.slice(0, -3)) + "&#xb0;" + " C";
+      feelsLike.innerHTML =
+        fahrenheitToCelsius(feelsLike.innerText.slice(0, -3)) + "&#xb0;" + " C";
+      windSpeed.innerText =
+        milesToKilometers(windSpeed.innerText.slice(0, -4)) + " km/h";
+    }
   };
-  setTempUnits();
+
+  tempSwitch.addEventListener("change", switchTemp);
 
   // Unit conversion functions
   const celsiusToFahrenheit = (temp) => {
@@ -293,7 +290,27 @@ const displayController = (() => {
   // 5-Day Forecast Weather Data
   const setForecast = async (place) => {
     const forecastData = await fetchWeatherAPI.getForecast(place);
-    console.log(forecastData.list);
+    const day1 = [];
+    for (let i = 0; i < 8; i++) {
+      day1.push(forecastData.list.shift());
+    }
+    const day2 = [];
+    for (let i = 0; i < 8; i++) {
+      day2.push(forecastData.list.shift());
+    }
+    const day3 = [];
+    for (let i = 0; i < 8; i++) {
+      day3.push(forecastData.list.shift());
+    }
+    const day4 = [];
+    for (let i = 0; i < 8; i++) {
+      day4.push(forecastData.list.shift());
+    }
+    const day5 = [];
+    for (let i = 0; i < 8; i++) {
+      day5.push(forecastData.list.shift());
+    }
+    console.log(day1, day2, day3, day4, day5);
   };
 
   return {};
