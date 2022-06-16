@@ -12,7 +12,7 @@
   font-style: bold;
 }
 
-/* add @media for less than 650px - change to vertical cards */
+/* add @media for less than 600px - change to vertical cards */
 
 * {
   padding: 0;
@@ -117,7 +117,7 @@ body {
 .container {
   display: grid;
   grid-template: 1fr 1fr / 0.5fr 1fr;
-  min-width: 175px;
+  min-width: 150px;
   justify-items: center;
 }
 

@@ -1,4 +1,5 @@
 import format from "date-fns/format";
+import parse from "date-fns/parse";
 import fetchWeatherAPI from "./fetchAPI.js";
 import thunderstormD from "./assets/thunderstorm-d.jpg";
 import thunderstormN from "./assets/thunderstorm-n.jpg";
@@ -45,6 +46,7 @@ const displayController = (() => {
       )
     );
     switchTemp();
+    setForecast(place);
   };
   setWeather("hamburg");
 
@@ -290,27 +292,68 @@ const displayController = (() => {
   // 5-Day Forecast Weather Data
   const setForecast = async (place) => {
     const forecastData = await fetchWeatherAPI.getForecast(place);
+    // Remove today's weather data from the next 5 days forecast
+    const timeDOM = document.getElementById("time");
+    const time24 = parse(
+      timeDOM.innerText.slice(0, -5),
+      "hh:mm",
+      new Date()
+    ).getTime();
+    const timeEnd = new Date().setHours(24, 0, 0, 0);
+    const timeDiff = (timeEnd - time24) / 1000 / 3600;
+    const forecastsToSkip = Math.floor(timeDiff / 2);
+    for (let i = 0; i < forecastsToSkip; i++) {
+      forecastData.list.shift();
+    }
+    console.log(forecastData);
     const day1 = [];
+    const day1Temps = [];
     for (let i = 0; i < 8; i++) {
       day1.push(forecastData.list.shift());
     }
+    day1.forEach((item) => {
+      day1Temps.push(item.main.temp_max);
+    });
+    console.log(Math.max(...day1Temps), Math.min(...day1Temps));
     const day2 = [];
+    const day2Temps = [];
     for (let i = 0; i < 8; i++) {
       day2.push(forecastData.list.shift());
     }
+    day2.forEach((item) => {
+      day2Temps.push(item.main.temp_max);
+    });
+    console.log(Math.max(...day2Temps), Math.min(...day2Temps));
     const day3 = [];
+    const day3Temps = [];
     for (let i = 0; i < 8; i++) {
       day3.push(forecastData.list.shift());
     }
+    day3.forEach((item) => {
+      day3Temps.push(item.main.temp_max);
+    });
+    console.log(Math.max(...day3Temps), Math.min(...day3Temps));
     const day4 = [];
+    const day4Temps = [];
     for (let i = 0; i < 8; i++) {
       day4.push(forecastData.list.shift());
     }
+    day4.forEach((item) => {
+      day4Temps.push(item.main.temp_max);
+    });
+    console.log(Math.max(...day4Temps), Math.min(...day4Temps));
     const day5 = [];
+    const day5Temps = [];
     for (let i = 0; i < 8; i++) {
       day5.push(forecastData.list.shift());
     }
-    console.log(day1, day2, day3, day4, day5);
+    day5.forEach((item) => {
+      if (item !== undefined) {
+        day5Temps.push(item.main.temp_max);
+      }
+    });
+    console.log(Math.max(...day5Temps), Math.min(...day5Temps));
+    console.log(day1Temps, day2Temps, day3Temps, day4Temps, day5Temps);
   };
 
   return {};
