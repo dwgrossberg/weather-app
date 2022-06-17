@@ -295,62 +295,58 @@ const displayController = (() => {
   // 5-Day Forecast Weather Data
   const setForecast = async (place) => {
     const forecastData = await fetchWeatherAPI.getForecast(place);
-
-    // Remove today's weather data from the next 5 days forecast
-    // const timeDOM = document.getElementById("time");
-    // const time24 = parse(
-    // timeDOM.innerText.slice(0, -5),
-    // "hh:mm",
-    // new Date()
-    // ).getTime();
-    // const timeEnd = new Date().setHours(24, 0, 0, 0);
-    // const timeDiff = (timeEnd - time24) / 1000 / 3600;
-    // const forecastsToSkip = Math.floor(timeDiff / 2);
-    // for (let i = 0; i < forecastsToSkip; i++) {
-    // forecastData.list.shift();
-    // }
-
     // Sort 5-day forecast data into days - each day has 8 data entries (every 3 hours)
+    // Collect daily high and low temperature readings & icon data
     const day1 = [];
     const day1Temps = [];
+    const day1Icons = [];
     for (let i = 0; i < 8; i++) {
       day1.push(forecastData.list.shift());
     }
     day1.forEach((item) => {
       day1Temps.push(item.main.temp_max);
+      day1Icons.push(item.weather[0].icon);
     });
     const day2 = [];
     const day2Temps = [];
+    const day2Icons = [];
     for (let i = 0; i < 8; i++) {
       day2.push(forecastData.list.shift());
     }
     day2.forEach((item) => {
       day2Temps.push(item.main.temp_max);
+      day2Icons.push(item.weather[0].icon);
     });
     const day3 = [];
     const day3Temps = [];
+    const day3Icons = [];
     for (let i = 0; i < 8; i++) {
       day3.push(forecastData.list.shift());
     }
     day3.forEach((item) => {
       day3Temps.push(item.main.temp_max);
+      day3Icons.push(item.weather[0].icon);
     });
     const day4 = [];
     const day4Temps = [];
+    const day4Icons = [];
     for (let i = 0; i < 8; i++) {
       day4.push(forecastData.list.shift());
     }
     day4.forEach((item) => {
       day4Temps.push(item.main.temp_max);
+      day4Icons.push(item.weather[0].icon);
     });
     const day5 = [];
     const day5Temps = [];
+    const day5Icons = [];
     for (let i = 0; i < 8; i++) {
       day5.push(forecastData.list.shift());
     }
     day5.forEach((item) => {
       if (item !== undefined) {
         day5Temps.push(item.main.temp_max);
+        day5Icons.push(item.weather[0].icon);
       }
     });
     // Save daily max temps
@@ -369,10 +365,60 @@ const displayController = (() => {
       Math.min(...day4Temps),
       Math.min(...day5Temps),
     ];
+    // Parse icon data for the "average" daily icon
+    // Remove d/n from end of icon string
+    const day1IconNumbs = [];
+    day1Icons.forEach((icon) => {
+      day1IconNumbs.push(icon.substring(0, icon.length - 1));
+    });
+    const day2IconNumbs = [];
+    day2Icons.forEach((icon) => {
+      day2IconNumbs.push(icon.substring(0, icon.length - 1));
+    });
+    const day3IconNumbs = [];
+    day3Icons.forEach((icon) => {
+      day3IconNumbs.push(icon.substring(0, icon.length - 1));
+    });
+    const day4IconNumbs = [];
+    day4Icons.forEach((icon) => {
+      day4IconNumbs.push(icon.substring(0, icon.length - 1));
+    });
+    const day5IconNumbs = [];
+    day5Icons.forEach((icon) => {
+      day5IconNumbs.push(icon.substring(0, icon.length - 1));
+    });
+    // Get the most frequently occurring icon in the array (mode)
+    function mode(array) {
+      if (array.length == 0) return null;
+      var modeMap = {};
+      var maxEl = array[0],
+        maxCount = 1;
+      for (var i = 0; i < array.length; i++) {
+        var el = array[i];
+        if (modeMap[el] == null) modeMap[el] = 1;
+        else modeMap[el]++;
+        if (modeMap[el] > maxCount) {
+          maxEl = el;
+          maxCount = modeMap[el];
+        }
+      }
+      return maxEl;
+    }
+    const forecastIcons = [
+      mode(day1IconNumbs),
+      mode(day2IconNumbs),
+      mode(day3IconNumbs),
+      mode(day4IconNumbs),
+      mode(day5IconNumbs),
+    ];
+
+    console.log(forecastIcons);
+
     // Call DOM functions
     setForecastDay();
     setMaxTemp(maxTemps);
     setMinTemp(minTemps);
+    setForecastIcons(forecastIcons);
   };
 
   const setForecastDay = () => {
@@ -405,6 +451,13 @@ const displayController = (() => {
     for (let i = 1; i < 6; i++) {
       const dayLow = document.getElementById(`day${i}-low`);
       dayLow.innerText = temps[i - 1];
+    }
+  };
+
+  const setForecastIcons = (icons) => {
+    for (let i = 1; i < 6; i++) {
+      const dayImg = document.getElementById(`day${i}-img`);
+      dayImg.src = `http://openweathermap.org/img/wn/${icons[i - 1]}@2x.png`;
     }
   };
 
