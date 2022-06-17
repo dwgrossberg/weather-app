@@ -1,5 +1,4 @@
 import format from "date-fns/format";
-import parse from "date-fns/parse";
 import fetchWeatherAPI from "./fetchAPI.js";
 import thunderstormD from "./assets/thunderstorm-d.jpg";
 import thunderstormN from "./assets/thunderstorm-n.jpg";
@@ -46,7 +45,6 @@ const displayController = (() => {
         "hh:mm"
       )
     );
-    switchTemp();
     // Call forecast data function
     setForecast(place);
   };
@@ -230,15 +228,36 @@ const displayController = (() => {
 
   const switchTemp = () => {
     const temp = document.getElementById("weather-temp");
+    const forecastHigh = Array.from(
+      document.getElementsByClassName("forecast-high")
+    );
+    const forecastLow = Array.from(
+      document.getElementsByClassName("forecast-low")
+    );
     const feelsLike = document.getElementById("feels-like-data");
     const windSpeed = document.getElementById("wind-speed-data");
     if (tempSwitch.checked === true) {
-      temp.innerHTML =
-        celsiusToFahrenheit(temp.innerText.slice(0, -3)) + "&#xb0;" + " F";
+      // Protect against repeat function calls
+      if (temp.innerText.substring(temp.innerText.length - 1) !== "F") {
+        temp.innerHTML =
+          celsiusToFahrenheit(temp.innerText.slice(0, -3)) + "&#xb0;" + " F";
+      }
       feelsLike.innerHTML =
         celsiusToFahrenheit(feelsLike.innerText.slice(0, -3)) + "&#xb0;" + " F";
       windSpeed.innerText =
         kilometersToMiles(windSpeed.innerText.slice(0, -5)) + " mph";
+      forecastHigh.forEach((high) => {
+        high.innerHTML =
+          Math.round(celsiusToFahrenheit(high.innerText.slice(0, -3))) +
+          "&#xb0;" +
+          " F";
+      });
+      forecastLow.forEach((low) => {
+        low.innerHTML =
+          Math.round(celsiusToFahrenheit(low.innerText.slice(0, -3))) +
+          "&#xb0;" +
+          " F";
+      });
     } else if (temp.innerText.substring(temp.innerText.length - 1) !== "C") {
       temp.innerHTML =
         fahrenheitToCelsius(temp.innerText.slice(0, -3)) + "&#xb0;" + " C";
@@ -246,6 +265,18 @@ const displayController = (() => {
         fahrenheitToCelsius(feelsLike.innerText.slice(0, -3)) + "&#xb0;" + " C";
       windSpeed.innerText =
         milesToKilometers(windSpeed.innerText.slice(0, -4)) + " km/h";
+      forecastHigh.forEach((high) => {
+        high.innerHTML =
+          Math.round(fahrenheitToCelsius(high.innerText.slice(0, -3))) +
+          "&#xb0;" +
+          " C";
+      });
+      forecastLow.forEach((low) => {
+        low.innerHTML =
+          Math.round(fahrenheitToCelsius(low.innerText.slice(0, -3))) +
+          "&#xb0;" +
+          " C";
+      });
     }
   };
 
@@ -395,6 +426,8 @@ const displayController = (() => {
     setMaxTemp(maxTemps);
     setMinTemp(minTemps);
     setForecastIcons(forecastIcons);
+    // Switch temp units if necessary
+    switchTemp();
   };
 
   const setForecastDay = () => {
