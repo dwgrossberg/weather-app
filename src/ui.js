@@ -46,8 +46,13 @@ const displayController = (() => {
       )
     );
     // Call forecast data function
-    setForecast(place);
+    setForecast(place, getLocalTime(weatherData.timezone), weatherTime);
   };
+
+  // Use geolocation API to setWeather to user location on page load
+  // if (navigator.geolocation) {
+  // navigator.geolocation.getCurrentPosition();
+  // }
   setWeather("hamburg");
 
   // Set background img based on main weather title
@@ -237,15 +242,17 @@ const displayController = (() => {
     const feelsLike = document.getElementById("feels-like-data");
     const windSpeed = document.getElementById("wind-speed-data");
     if (tempSwitch.checked === true) {
-      // Protect against repeat function calls
+      // Protect against repeat function calls from async data loads
       if (temp.innerText.substring(temp.innerText.length - 1) !== "F") {
         temp.innerHTML =
           celsiusToFahrenheit(temp.innerText.slice(0, -3)) + "&#xb0;" + " F";
+        feelsLike.innerHTML =
+          celsiusToFahrenheit(feelsLike.innerText.slice(0, -3)) +
+          "&#xb0;" +
+          " F";
+        windSpeed.innerText =
+          kilometersToMiles(windSpeed.innerText.slice(0, -5)) + " mph";
       }
-      feelsLike.innerHTML =
-        celsiusToFahrenheit(feelsLike.innerText.slice(0, -3)) + "&#xb0;" + " F";
-      windSpeed.innerText =
-        kilometersToMiles(windSpeed.innerText.slice(0, -5)) + " mph";
       forecastHigh.forEach((high) => {
         high.innerHTML =
           Math.round(celsiusToFahrenheit(high.innerText.slice(0, -3))) +
@@ -324,7 +331,7 @@ const displayController = (() => {
   setInterval(setLocalTime, 1000);
 
   // 5-Day Forecast Weather Data
-  const setForecast = async (place) => {
+  const setForecast = async (place, localDate, pod) => {
     const forecastData = await fetchWeatherAPI.getForecast(place);
     // Sort 5-day forecast data into days - each day has 8 data entries (every 3 hours)
     // Collect daily high and low temperature readings & icon data
@@ -398,7 +405,7 @@ const displayController = (() => {
     ];
     // Parse icon data for the "average" daily icon
     // Get the most frequently occurring icon in the array (mode)
-    function mode(array) {
+    const mode = (array) => {
       if (array.length == 0) return null;
       const modeMap = {};
       let maxEl = array[0],
@@ -413,7 +420,7 @@ const displayController = (() => {
         }
       }
       return maxEl;
-    }
+    };
     const forecastIcons = [
       mode(day1Icons),
       mode(day2Icons),
@@ -422,31 +429,35 @@ const displayController = (() => {
       mode(day5Icons),
     ];
     // Call DOM functions
-    setForecastDay();
+    setForecastDay(localDate);
     setMaxTemp(maxTemps);
     setMinTemp(minTemps);
-    setForecastIcons(forecastIcons);
+    setForecastIcons(forecastIcons, pod);
     // Switch temp units if necessary
     switchTemp();
   };
 
-  const setForecastDay = () => {
-    const day0 = new Date();
-    const day1 = format(day0.setDate(day0.getDate() + 1), "EEE");
-    const day1DOM = document.getElementById("day1-name");
-    day1DOM.innerText = day1;
-    const day2 = format(day0.setDate(day0.getDate() + 1), "EEE");
-    const day2DOM = document.getElementById("day2-name");
-    day2DOM.innerText = day2;
-    const day3 = format(day0.setDate(day0.getDate() + 1), "EEE");
-    const day3DOM = document.getElementById("day3-name");
-    day3DOM.innerText = day3;
-    const day4 = format(day0.setDate(day0.getDate() + 1), "EEE");
-    const day4DOM = document.getElementById("day4-name");
-    day4DOM.innerText = day4;
-    const day5 = format(day0.setDate(day0.getDate() + 1), "EEE");
-    const day5DOM = document.getElementById("day5-name");
-    day5DOM.innerText = day5;
+  const setForecastDay = (date) => {
+    console.log(date);
+    if (date === undefined) return;
+    else {
+      const day0 = date;
+      const day1 = format(day0.setDate(day0.getDate() + 1), "EEE");
+      const day1DOM = document.getElementById("day1-name");
+      day1DOM.innerText = day1;
+      const day2 = format(day0.setDate(day0.getDate() + 1), "EEE");
+      const day2DOM = document.getElementById("day2-name");
+      day2DOM.innerText = day2;
+      const day3 = format(day0.setDate(day0.getDate() + 1), "EEE");
+      const day3DOM = document.getElementById("day3-name");
+      day3DOM.innerText = day3;
+      const day4 = format(day0.setDate(day0.getDate() + 1), "EEE");
+      const day4DOM = document.getElementById("day4-name");
+      day4DOM.innerText = day4;
+      const day5 = format(day0.setDate(day0.getDate() + 1), "EEE");
+      const day5DOM = document.getElementById("day5-name");
+      day5DOM.innerText = day5;
+    }
   };
 
   const setMaxTemp = (temps) => {
@@ -463,10 +474,12 @@ const displayController = (() => {
     }
   };
 
-  const setForecastIcons = (icons) => {
+  const setForecastIcons = (icons, pod) => {
     for (let i = 1; i < 6; i++) {
       const dayImg = document.getElementById(`day${i}-img`);
-      dayImg.src = `http://openweathermap.org/img/wn/${icons[i - 1]}@2x.png`;
+      dayImg.src = `http://openweathermap.org/img/wn/${
+        icons[i - 1].slice(0, -1) + pod
+      }@2x.png`;
     }
   };
 

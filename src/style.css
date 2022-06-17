@@ -12,7 +12,7 @@
   font-style: bold;
 }
 
-/* add @media for less than 600px horiz or 700px vert - change to vertical cards */
+/* add @media for less than 600px x 600px - change to vertical cards */
 
 * {
   padding: 0;
@@ -34,7 +34,7 @@ body {
 #content {
   height: 100vh;
   display: grid;
-  grid-template: 1fr 1fr / 0.75fr 0.5fr 0.5fr;
+  grid-template: 1fr 0.5fr / 0.75fr 0.5fr 0.5fr;
 }
 
 #weather-main,
@@ -170,7 +170,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   min-width: fit-content;
   max-width: 200px;
 }
