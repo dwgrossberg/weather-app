@@ -351,50 +351,29 @@ const displayController = (() => {
     });
     // Save daily max temps
     const maxTemps = [
-      Math.max(...day1Temps),
-      Math.max(...day2Temps),
-      Math.max(...day3Temps),
-      Math.max(...day4Temps),
-      Math.max(...day5Temps),
+      Math.max(...day1Temps).toFixed(1),
+      Math.max(...day2Temps).toFixed(1),
+      Math.max(...day3Temps).toFixed(1),
+      Math.max(...day4Temps).toFixed(1),
+      Math.max(...day5Temps).toFixed(1),
     ];
     // Save daily min temps
     const minTemps = [
-      Math.min(...day1Temps),
-      Math.min(...day2Temps),
-      Math.min(...day3Temps),
-      Math.min(...day4Temps),
-      Math.min(...day5Temps),
+      Math.min(...day1Temps).toFixed(1),
+      Math.min(...day2Temps).toFixed(1),
+      Math.min(...day3Temps).toFixed(1),
+      Math.min(...day4Temps).toFixed(1),
+      Math.min(...day5Temps).toFixed(1),
     ];
     // Parse icon data for the "average" daily icon
-    // Remove d/n from end of icon string
-    const day1IconNumbs = [];
-    day1Icons.forEach((icon) => {
-      day1IconNumbs.push(icon.substring(0, icon.length - 1));
-    });
-    const day2IconNumbs = [];
-    day2Icons.forEach((icon) => {
-      day2IconNumbs.push(icon.substring(0, icon.length - 1));
-    });
-    const day3IconNumbs = [];
-    day3Icons.forEach((icon) => {
-      day3IconNumbs.push(icon.substring(0, icon.length - 1));
-    });
-    const day4IconNumbs = [];
-    day4Icons.forEach((icon) => {
-      day4IconNumbs.push(icon.substring(0, icon.length - 1));
-    });
-    const day5IconNumbs = [];
-    day5Icons.forEach((icon) => {
-      day5IconNumbs.push(icon.substring(0, icon.length - 1));
-    });
     // Get the most frequently occurring icon in the array (mode)
     function mode(array) {
       if (array.length == 0) return null;
-      var modeMap = {};
-      var maxEl = array[0],
+      const modeMap = {};
+      let maxEl = array[0],
         maxCount = 1;
-      for (var i = 0; i < array.length; i++) {
-        var el = array[i];
+      for (let i = 0; i < array.length; i++) {
+        const el = array[i];
         if (modeMap[el] == null) modeMap[el] = 1;
         else modeMap[el]++;
         if (modeMap[el] > maxCount) {
@@ -405,15 +384,12 @@ const displayController = (() => {
       return maxEl;
     }
     const forecastIcons = [
-      mode(day1IconNumbs),
-      mode(day2IconNumbs),
-      mode(day3IconNumbs),
-      mode(day4IconNumbs),
-      mode(day5IconNumbs),
+      mode(day1Icons),
+      mode(day2Icons),
+      mode(day3Icons),
+      mode(day4Icons),
+      mode(day5Icons),
     ];
-
-    console.log(forecastIcons);
-
     // Call DOM functions
     setForecastDay();
     setMaxTemp(maxTemps);
@@ -443,14 +419,14 @@ const displayController = (() => {
   const setMaxTemp = (temps) => {
     for (let i = 1; i < 6; i++) {
       const dayHigh = document.getElementById(`day${i}-high`);
-      dayHigh.innerText = temps[i - 1];
+      dayHigh.innerHTML = Math.round(temps[i - 1]) + "&#xb0;" + " C";
     }
   };
 
   const setMinTemp = (temps) => {
     for (let i = 1; i < 6; i++) {
       const dayLow = document.getElementById(`day${i}-low`);
-      dayLow.innerText = temps[i - 1];
+      dayLow.innerHTML = Math.round(temps[i - 1]) + "&#xb0;" + " C";
     }
   };
 
