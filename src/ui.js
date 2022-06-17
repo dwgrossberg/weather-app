@@ -23,6 +23,7 @@ const displayController = (() => {
       weatherData.weather[0].icon.length - 1
     );
     console.log(weatherData);
+    // Call DOM functions
     setBackground(weatherData.weather[0].main, weatherTime);
     setTemp(weatherData.main.temp.toFixed(1));
     setIcon(weatherData.weather[0].icon);
@@ -46,10 +47,12 @@ const displayController = (() => {
       )
     );
     switchTemp();
+    // Call forecast data function
     setForecast(place);
   };
   setWeather("hamburg");
 
+  // Set background img based on main weather title
   const setBackground = (weather, time) => {
     switch (weather) {
       case "Thunderstorm":
@@ -292,20 +295,22 @@ const displayController = (() => {
   // 5-Day Forecast Weather Data
   const setForecast = async (place) => {
     const forecastData = await fetchWeatherAPI.getForecast(place);
+
     // Remove today's weather data from the next 5 days forecast
-    const timeDOM = document.getElementById("time");
-    const time24 = parse(
-      timeDOM.innerText.slice(0, -5),
-      "hh:mm",
-      new Date()
-    ).getTime();
-    const timeEnd = new Date().setHours(24, 0, 0, 0);
-    const timeDiff = (timeEnd - time24) / 1000 / 3600;
-    const forecastsToSkip = Math.floor(timeDiff / 2);
-    for (let i = 0; i < forecastsToSkip; i++) {
-      forecastData.list.shift();
-    }
-    console.log(forecastData);
+    // const timeDOM = document.getElementById("time");
+    // const time24 = parse(
+    // timeDOM.innerText.slice(0, -5),
+    // "hh:mm",
+    // new Date()
+    // ).getTime();
+    // const timeEnd = new Date().setHours(24, 0, 0, 0);
+    // const timeDiff = (timeEnd - time24) / 1000 / 3600;
+    // const forecastsToSkip = Math.floor(timeDiff / 2);
+    // for (let i = 0; i < forecastsToSkip; i++) {
+    // forecastData.list.shift();
+    // }
+
+    // Sort 5-day forecast data into days - each day has 8 data entries (every 3 hours)
     const day1 = [];
     const day1Temps = [];
     for (let i = 0; i < 8; i++) {
@@ -314,7 +319,6 @@ const displayController = (() => {
     day1.forEach((item) => {
       day1Temps.push(item.main.temp_max);
     });
-    console.log(Math.max(...day1Temps), Math.min(...day1Temps));
     const day2 = [];
     const day2Temps = [];
     for (let i = 0; i < 8; i++) {
@@ -323,7 +327,6 @@ const displayController = (() => {
     day2.forEach((item) => {
       day2Temps.push(item.main.temp_max);
     });
-    console.log(Math.max(...day2Temps), Math.min(...day2Temps));
     const day3 = [];
     const day3Temps = [];
     for (let i = 0; i < 8; i++) {
@@ -332,7 +335,6 @@ const displayController = (() => {
     day3.forEach((item) => {
       day3Temps.push(item.main.temp_max);
     });
-    console.log(Math.max(...day3Temps), Math.min(...day3Temps));
     const day4 = [];
     const day4Temps = [];
     for (let i = 0; i < 8; i++) {
@@ -341,7 +343,6 @@ const displayController = (() => {
     day4.forEach((item) => {
       day4Temps.push(item.main.temp_max);
     });
-    console.log(Math.max(...day4Temps), Math.min(...day4Temps));
     const day5 = [];
     const day5Temps = [];
     for (let i = 0; i < 8; i++) {
@@ -352,8 +353,59 @@ const displayController = (() => {
         day5Temps.push(item.main.temp_max);
       }
     });
-    console.log(Math.max(...day5Temps), Math.min(...day5Temps));
-    console.log(day1Temps, day2Temps, day3Temps, day4Temps, day5Temps);
+    // Save daily max temps
+    const maxTemps = [
+      Math.max(...day1Temps),
+      Math.max(...day2Temps),
+      Math.max(...day3Temps),
+      Math.max(...day4Temps),
+      Math.max(...day5Temps),
+    ];
+    // Save daily min temps
+    const minTemps = [
+      Math.min(...day1Temps),
+      Math.min(...day2Temps),
+      Math.min(...day3Temps),
+      Math.min(...day4Temps),
+      Math.min(...day5Temps),
+    ];
+    // Call DOM functions
+    setForecastDay();
+    setMaxTemp(maxTemps);
+    setMinTemp(minTemps);
+  };
+
+  const setForecastDay = () => {
+    const day0 = new Date();
+    const day1 = format(day0.setDate(day0.getDate() + 1), "EEE");
+    const day1DOM = document.getElementById("day1-name");
+    day1DOM.innerText = day1;
+    const day2 = format(day0.setDate(day0.getDate() + 1), "EEE");
+    const day2DOM = document.getElementById("day2-name");
+    day2DOM.innerText = day2;
+    const day3 = format(day0.setDate(day0.getDate() + 1), "EEE");
+    const day3DOM = document.getElementById("day3-name");
+    day3DOM.innerText = day3;
+    const day4 = format(day0.setDate(day0.getDate() + 1), "EEE");
+    const day4DOM = document.getElementById("day4-name");
+    day4DOM.innerText = day4;
+    const day5 = format(day0.setDate(day0.getDate() + 1), "EEE");
+    const day5DOM = document.getElementById("day5-name");
+    day5DOM.innerText = day5;
+  };
+
+  const setMaxTemp = (temps) => {
+    for (let i = 1; i < 6; i++) {
+      const dayHigh = document.getElementById(`day${i}-high`);
+      dayHigh.innerText = temps[i - 1];
+    }
+  };
+
+  const setMinTemp = (temps) => {
+    for (let i = 1; i < 6; i++) {
+      const dayLow = document.getElementById(`day${i}-low`);
+      dayLow.innerText = temps[i - 1];
+    }
   };
 
   return {};
