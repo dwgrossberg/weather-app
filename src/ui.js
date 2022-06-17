@@ -61,7 +61,7 @@ const displayController = (() => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
   } else {
-    setWeather("hamburg");
+    setWeather("bangkok");
   }
 
   // Set background img based on main weather title
@@ -450,7 +450,6 @@ const displayController = (() => {
   };
 
   const setForecastDay = (date) => {
-    console.log(date);
     if (date === undefined) return;
     else {
       const day0 = date;
