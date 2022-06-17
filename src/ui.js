@@ -17,6 +17,7 @@ import cloudsN from "./assets/clouds-n.jpg";
 
 const displayController = (() => {
   const setWeather = async (place) => {
+    // const locationData = await fetchWeatherAPI.getLocation(place);
     const weatherData = await fetchWeatherAPI.getWeather(place);
     const weatherTime = weatherData.weather[0].icon.substring(
       weatherData.weather[0].icon.length - 1
@@ -50,10 +51,18 @@ const displayController = (() => {
   };
 
   // Use geolocation API to setWeather to user location on page load
-  // if (navigator.geolocation) {
-  // navigator.geolocation.getCurrentPosition();
-  // }
-  setWeather("hamburg");
+  const showPosition = async (position) => {
+    const locationData = await fetchWeatherAPI.getLocation(
+      position.coords.latitude,
+      position.coords.longitude
+    );
+    setWeather(locationData.results[0].components.state);
+  };
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    setWeather("hamburg");
+  }
 
   // Set background img based on main weather title
   const setBackground = (weather, time) => {
@@ -309,10 +318,13 @@ const displayController = (() => {
   // Search for weather in a new city/place
   const weatherSearch = () => {
     const search = document.getElementById("place-search");
-    search.addEventListener("search", () => {
+    search.addEventListener("search", async () => {
       if (search.value === "") return;
       else {
+        const locationData = await fetchWeatherAPI.getLocation(search.value);
+        console.log(locationData);
         setWeather(search.value);
+
         setForecast(search.value);
       }
     });
