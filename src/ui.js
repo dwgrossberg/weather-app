@@ -318,13 +318,10 @@ const displayController = (() => {
   // Search for weather in a new city/place
   const weatherSearch = () => {
     const search = document.getElementById("place-search");
-    search.addEventListener("search", async () => {
+    search.addEventListener("search", () => {
       if (search.value === "") return;
       else {
-        const locationData = await fetchWeatherAPI.getLocation(search.value);
-        console.log(locationData);
         setWeather(search.value);
-
         setForecast(search.value);
       }
     });

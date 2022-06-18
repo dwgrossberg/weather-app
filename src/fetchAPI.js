@@ -1,10 +1,12 @@
 const fetchWeatherAPI = (() => {
+  // Open Cage Data API  - reverse geolocation to find nearest city using lat and lon provided by geoLocation API
   const getLocation = async (lat, lon) => {
     try {
       const geoResponse = await fetch(
         `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=c241c7e8158441e18dfe41ecb82d7374`
       );
       const geoData = await geoResponse.json();
+      console.log(geoData);
       return geoData;
     } catch (err) {
       console.log(err);
