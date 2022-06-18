@@ -28,7 +28,7 @@ const fetchWeatherAPI = (() => {
   const getForecast = async (city) => {
     try {
       const forecastResponse = await fetch(
-        `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=408fcef602304b907beceaaabd2af48a&units=metric`
+        `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=408fcef602304b907beceaaabd2af48a&units=metric`
       );
       const forecastData = await forecastResponse.json();
       return forecastData;
