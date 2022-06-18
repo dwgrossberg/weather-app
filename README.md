@@ -4,7 +4,7 @@ A small weather app built using Async/Await, Promises and the OpenWeather API
 
 ---
 
-![weather.app-example](src/assets/weather-app-example.png)
+![weather.app-example](src/assets/weather-app-paris.png)
 
 ## Key Features :
 
