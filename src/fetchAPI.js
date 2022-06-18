@@ -6,7 +6,6 @@ const fetchWeatherAPI = (() => {
         `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=c241c7e8158441e18dfe41ecb82d7374`
       );
       const geoData = await geoResponse.json();
-      console.log(geoData);
       return geoData;
     } catch (err) {
       console.log(err);

@@ -50,6 +50,9 @@ const displayController = (() => {
   };
 
   // Use geolocation API to setWeather to user location on page load
+  const weatherOnLoad = () => {
+    setWeather("bangkok");
+  };
   const showPosition = async (position) => {
     const locationData = await fetchWeatherAPI.getLocation(
       position.coords.latitude,
@@ -58,9 +61,7 @@ const displayController = (() => {
     setWeather(locationData.results[0].components.state);
   };
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  } else {
-    setWeather("bangkok");
+    navigator.geolocation.getCurrentPosition(showPosition, weatherOnLoad);
   }
 
   // Set background img based on main weather title
