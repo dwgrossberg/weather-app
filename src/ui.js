@@ -17,7 +17,6 @@ import cloudsN from "./assets/clouds-n.jpg";
 
 const displayController = (() => {
   const setWeather = async (place) => {
-    // const locationData = await fetchWeatherAPI.getLocation(place);
     const weatherData = await fetchWeatherAPI.getWeather(place);
     const weatherTime = weatherData.weather[0].icon.substring(
       weatherData.weather[0].icon.length - 1
@@ -155,7 +154,7 @@ const displayController = (() => {
 
   const setIcon = (icon) => {
     const iconDOM = document.getElementById("weather-icon-img");
-    iconDOM.src = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+    iconDOM.src = `https://openweathermap.org/img/wn/${icon}@2x.png`;
   };
 
   const setDescription = (details) => {
@@ -485,7 +484,7 @@ const displayController = (() => {
   const setForecastIcons = (icons, pod) => {
     for (let i = 1; i < 6; i++) {
       const dayImg = document.getElementById(`day${i}-img`);
-      dayImg.src = `http://openweathermap.org/img/wn/${
+      dayImg.src = `https://openweathermap.org/img/wn/${
         icons[i - 1].slice(0, -1) + pod
       }@2x.png`;
     }
