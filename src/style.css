@@ -354,6 +354,10 @@ label[for="city/place"] {
     max-width: 70%;
   }
 
+  .weather-details {
+    align-items: center;
+  }
+
   #weather-search {
     min-width: 70%;
     max-width: 70%;
