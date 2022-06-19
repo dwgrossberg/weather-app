@@ -318,11 +318,13 @@ const displayController = (() => {
   // Search for weather in a new city/place
   const weatherSearch = () => {
     const search = document.getElementById("place-search");
-    search.addEventListener("search", () => {
-      if (search.value === "") return;
-      else {
-        setWeather(search.value);
-        setForecast(search.value);
+    search.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        if (search.value === "") return;
+        else {
+          setWeather(search.value);
+          setForecast(search.value);
+        }
       }
     });
   };
